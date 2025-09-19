@@ -19,6 +19,9 @@ gitea:
     session:
       PROVIDER: db
       DOMAIN: localhost
+    service:
+      ALLOW_ONLY_EXTERNAL_REGISTRATION: true
+      ENABLE_INTERNAL_SIGNIN: false
   oauth:
     - name: 'sso'
       provider: 'openidConnect'
