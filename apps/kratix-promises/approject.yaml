@@ -7,3 +7,5 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   description: Kratix Promises
+  sourceRepos:
+    - '*'
