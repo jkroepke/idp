@@ -12,3 +12,9 @@ forecastle:
       - paths:
           - path: /
             pathType: Exact
+          - path: /logo192.png
+            pathType: Exact
+          - path: /api/
+            pathType: Prefix
+          - path: /static/
+            pathType: Prefix
