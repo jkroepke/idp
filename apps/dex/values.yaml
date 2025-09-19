@@ -19,7 +19,7 @@ config:
     skipApprovalScreen: true
     alwaysShowLoginScreen: false
     redirectURIs:
-      - 'http://localhost/argo-cd/api/dex/auth/callback'
+      - 'http://localhost/argo-cd/api/dex/callback'
   staticClients:
     - id: argocd
       name: 'Argo CD'
