@@ -6,7 +6,7 @@ additionalResources:
   spec:
     secretRef:
       name: git-credentials
-    namespace: kratix-platform-system
+      namespace: kratix-platform-system
     url: http://forgejo-http.forgejo.svc.cluster.local:3000/demo/state
     branch: main
 - apiVersion: platform.kratix.io/v1alpha1
