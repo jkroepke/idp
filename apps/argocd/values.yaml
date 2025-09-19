@@ -22,18 +22,25 @@ configs:
     ## Ref: https://argo-cd.readthedocs.io/en/latest/faq/#how-to-disable-admin-user
     admin.enabled: false
     # OIDC configuration as an alternative to dex (optional).
-    oidc.config: |
-      name: AzureAD
-      issuer: http://dex.dex.svc.cluster.local/dex
-      clientID: argocd
-      clientSecret: argocd
-      enablePKCEAuthentication: true
-      requestedScopes:
-        - openid
-        - profile
-        - email
+    # Dex configuration
+    dex.config: |
+      oauth2:
+        responseTypes: [ "code" ]
+        skipApprovalScreen: true
+        alwaysShowLoginScreen: false
+      connectors:
+        # GitHub example
+        - type: oauth
+          id: dex
+          name: DEX
+          config:
+            clientID: argocd
+            clientSecret: argocd
+          tokenURL: http://dex.dex.svc.cluster.local:5556/dex/token
+          authorizationURL: http://localhost/dex/auth
+          userInfoURL: http://dex.dex.svc.cluster.local:5556/dex/userinfo
 dex:
-  enabled: false
+  enabled: true
 
 server:
   extraArgs:

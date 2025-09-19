@@ -8,7 +8,7 @@ ingress:
           pathType: Prefix
 
 config:
-  issuer: http://dex.dex.svc.cluster.local/dex
+  issuer: http://dex.dex.svc.cluster.local:5556/dex
   enablePasswordDB: true
   storage:
     type: kubernetes
@@ -18,6 +18,8 @@ config:
     responseTypes: [ "code" ]
     skipApprovalScreen: true
     alwaysShowLoginScreen: false
+    redirectURIs:
+      - 'http://localhost/argo-cd/auth/callback'
   staticClients:
     - id: argocd
       name: 'Argo CD'
