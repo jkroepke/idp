@@ -23,7 +23,7 @@ config:
       name: 'Argo CD'
       secret: argocd
       redirectURIs:
-        - 'http://localhost/argo-cd/api/dex/callback'
+        - 'http://localhost/argo-cd/auth/callback'
     - id: forgejo
       name: 'forgejo'
       secret: forgejo
