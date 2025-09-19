@@ -17,6 +17,8 @@ forecastle:
         paths:
           - path: "^/$"
             pathType: ImplementationSpecific
+          - path: /
+            pathType: Exact
           - path: /logo192.png
             pathType: Exact
           - path: /api/
