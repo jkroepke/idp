@@ -21,14 +21,10 @@ gitea:
       DOMAIN: localhost
   oauth:
     - name: 'sso'
-      provider: 'nextcloud'
+      provider: 'openidConnect'
       key: 'forgejo'
       secret: 'forgejo'
-      autoDiscoverUrl: 'http://dex.dex.svc.cluster.local:5556/dex/.well-known/openid-configuration'
-      useCustomUrls: "true"
-      customAuthUrl: http://localhost/dex/auth
-      customTokenUrl: 'http://dex.dex.svc.cluster.local:5556/dex/token'
-      customProfileUrl: 'http://dex.dex.svc.cluster.local:5556/dex/userinfo'
+      autoDiscoverUrl: 'http://localhost/git/dex/.well-known/openid-configuration'
       scopes: "openid email profile"
 service:
   http:
@@ -36,6 +32,74 @@ service:
   ssh:
     port: 2222
 
+extraContainers:
+  - name: dex
+    image: ghcr.io/dexidp/dex:v2.44.0
+    imagePullPolicy: IfNotPresent
+    args:
+      - dex
+      - serve
+      - "--web-http-addr"
+      - 0.0.0.0:80
+      - /etc/dex/config.yaml
+    ports:
+      - containerPort: 5556
+        name: dex
+        protocol: TCP
+    readinessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: /healthz/ready
+        port: telemetry
+        scheme: HTTP
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+    livenessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: /healthz/live
+        port: telemetry
+        scheme: HTTP
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+    volumeMounts:
+      - mountPath: /etc/dex
+        name: config
+        readOnly: true
+extraVolumes:
+  - name: config
+    configMap:
+      defaultMode: 420
+      name: dex
+
+extraDeploy:
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: dex
+    data:
+        config.yaml: |
+          issuer: http://localhost/git/dex
+          connectors:
+          - type: oidc
+            id: sso
+            name: SSO
+            config:
+              issuer: http://dex.dex.svc.cluster.local:5556/dex
+              clientID: forgejo
+              clientSecret: forgejo
+              insecureSkipEmailVerified: true
+              getUserInfo: false
+              providerDiscoveryOverrides:
+                authURL: http://localhost/dex/auth
+          staticClients:
+            - id: forgejo
+              name: 'forgejo'
+              secret: forgejo
+              redirectURIs:
+                - 'http://localhost/git/user/oauth2/sso/callback'
 ingress:
   enabled: true
   className: "nginx"
@@ -50,3 +114,6 @@ ingress:
       paths:
         - path: "/git(/.*)"
           pathType: ImplementationSpecific
+        - path: "/git/dex/"
+          pathType: Prefix
+          port: dex

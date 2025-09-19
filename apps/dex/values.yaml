@@ -28,7 +28,7 @@ config:
       name: 'forgejo'
       secret: forgejo
       redirectURIs:
-        - 'http://localhost/git/user/oauth2/sso/callback'
+        - 'http://localhost/git/dex/callback'
   staticPasswords:
     - email: "demo@example.com"
       # bcrypt hash of the string "password": $(echo password | htpasswd -BinC 10 admin | cut -d: -f2)
