@@ -26,6 +26,9 @@ gitea:
       secret: 'forgejo'
       autoDiscoverUrl: 'http://localhost/git/dex/.well-known/openid-configuration'
       scopes: "openid email profile"
+      groupClaimName: email
+      adminGroup: 'demo@example.com'
+
 service:
   http:
     port: 3000
