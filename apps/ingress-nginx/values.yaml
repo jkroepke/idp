@@ -1,4 +1,6 @@
 controller:
+  allowSnippetAnnotations: true
+  enableAnnotationValidations: true
   hostPort:
     enabled: true
     ports:
