@@ -25,7 +25,6 @@ additionalResources:
     stateStoreRef:
       name: default
       kind: GitStateStore
-    path: management-cluster
     strictMatchLabels: true
 - apiVersion: v1
   kind: Secret
