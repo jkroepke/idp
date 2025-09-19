@@ -2,7 +2,7 @@ ingress:
   enabled: true
   className: "nginx"
   hosts:
-    - host: auth.local.creativesandbox.de
+    - host: localhost
       paths:
         - path: /
           pathType: Prefix
@@ -22,7 +22,7 @@ config:
       public: true
       name: 'Public Client'
       redirectURIs:
-        - 'https://example.com/oidc/callback'
+        - 'https://localhost/oidc/callback'
   staticPasswords:
     - email: "demo@example.com"
       # bcrypt hash of the string "password": $(echo password | htpasswd -BinC 10 admin | cut -d: -f2)
