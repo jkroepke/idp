@@ -8,7 +8,7 @@ additionalResources:
       name: git-credentials
     namespace: kratix-platform-system
     url: http://forgejo-http.forgejo.svc.cluster.local:3000/demo/state
-  branch: main
+    branch: main
 - apiVersion: platform.kratix.io/v1alpha1
   kind: Destination
   metadata:
