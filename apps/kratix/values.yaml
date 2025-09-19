@@ -25,6 +25,7 @@ additionalResources:
     stateStoreRef:
       name: default
       kind: GitStateStore
+    path: /
     strictMatchLabels: true
 - apiVersion: v1
   kind: Secret
