@@ -13,4 +13,4 @@ controller:
     certManager:
       enabled: true
   updateStrategy:
-    type: Restart
+    type: Recreate
