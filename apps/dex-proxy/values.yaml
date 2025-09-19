@@ -88,7 +88,7 @@ items:
           proxy_set_header   X-Frame-Options SAMEORIGIN; # Optional
           proxy_redirect     off;
       
-          sub_filter '"authorization_endpoint": "http://dex-proxy.dex.svc.cluster.local:8080/dex/auth"' '"authorization_endpoint": "http://localhost/dex/auth';
+          sub_filter 'http://dex-proxy.dex.svc.cluster.local:8080/dex/auth' 'http://localhost/dex/auth';
           sub_filter_once on;
         }
       }
