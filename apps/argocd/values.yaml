@@ -58,7 +58,6 @@ server:
     annotations:
       forecastle.stakater.com/expose: 'true'
       forecastle.stakater.com/appName: 'Argo CD'
-    paths:
-      - "/argo-cd/"
+    path: "/argo-cd/"
     pathType: Prefix
     tls: false
