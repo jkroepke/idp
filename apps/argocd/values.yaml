@@ -36,7 +36,7 @@ configs:
     create: true
     policy.default: 'role:unauthenticated'
     policy.csv: |-
-      g, demo@example.com, role:admin
+      g, admin@example.com, role:admin
     scopes: '[groups, email]'
 dex:
   enabled: false
