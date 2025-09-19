@@ -1,38 +1,28 @@
 apiVersion: argoproj.io/v1alpha1
-kind: Application
+kind: ApplicationSet
 metadata:
-  name: bootstrap
-  namespace: argocd
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
+  name: kratix-promises
 spec:
-  project: default
-  source:
-    repoURL: https://github.com/jkroepke/idp.git
-    targetRevision: init
-    path: kratix
-    directory:
-      recurse: true
-      include: '*/application.yaml'
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: argocd
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-      allowEmpty: false
-    syncOptions:
-      - Validate=true
-      - CreateNamespace=true
-      - PrunePropagationPolicy=foreground
-      - RespectIgnoreDifferences=true
-      - ApplyOutOfSyncOnly=true
-      - ServerSideApply=true
-    retry:
-      limit: 5
-      backoff:
-        duration: 5s
-        factor: 2
-        maxDuration: 3m
-  revisionHistoryLimit: 10
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - git:
+        repoURL: https://github.com/jkroepke/idp.git
+        revision: init
+        directories:
+          - path: kratix/promises/*
+  template:
+    metadata:
+      name: '{{.path.basename}}'
+    spec:
+      project: kratix-promises
+      sources:
+        - repoURL: https://github.com/jkroepke/idp.git
+          targetRevision: init
+          path: '{{.path.path}}'
+          directory:
+            recurse: true
+            include: 'promise.yaml'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: 'default'
