@@ -149,16 +149,7 @@ configs:
             message = "Provisioning ..."
           }
       
-          local function contains (table, val)
-            for i, v in ipairs(table) do
-              if v == val then
-                return true
-              end
-            end
-            return false
-          end
-      
-          if obj.status == nil or next(obj.status) == nil or obj.status.conditions == nil then
+          if obj.status == nil or obj.status.conditions == nil then
             return health_status
           end
       
