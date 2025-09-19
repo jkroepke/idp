@@ -3,6 +3,8 @@ persistence:
 
 gitea:
   config:
+    actions:
+      ENABLED: false
     indexer:
       REPO_INDEXER_ENABLED: true
     server:
@@ -11,6 +13,9 @@ gitea:
       START_SSH_SERVER: true
       SSH_PORT: 2222
       OFFLINE_MODE: true
+    session:
+      PROVIDER: db
+      DOMAIN: localhost
   oauth:
     - name: 'sso'
       provider: 'openidConnect'
@@ -34,8 +39,14 @@ ingress:
   annotations:
     forecastle.stakater.com/expose: 'true'
     forecastle.stakater.com/appName: 'Forgejo'
+    forecastle.stakater.com/url: 'http://localhost/git/'
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      rewrite ^(/git)/?$ $1/query redirect;
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
   hosts:
     - host: localhost
       paths:
-        - path: /git/
-          pathType: Prefix
+        - paths:
+            - "/git(/|$)(.*)"
+          pathType: ImplementationSpecific
