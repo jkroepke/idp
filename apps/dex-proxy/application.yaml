@@ -1,19 +1,19 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: dex
+  name: dex-proxy
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   sources:
-    - repoURL: https://charts.dexidp.io
-      chart: dex
-      targetRevision: 0.24.0
+    - repoURL: ghcr.io/jkroepke/charts
+      chart: values
+      targetRevision: 1.0.4
       helm:
         valueFiles:
-          - $values/apps/dex/values.yaml
+          - $values/apps/dex-proxy/values.yaml
     - repoURL: 'https://github.com/jkroepke/idp.git'
       targetRevision: init
       ref: values
