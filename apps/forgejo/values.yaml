@@ -35,42 +35,7 @@ service:
   ssh:
     port: 2222
 
-extraContainers:
-  - name: dex
-    image: ghcr.io/dexidp/dex:v2.44.0
-    imagePullPolicy: IfNotPresent
-    args:
-      - dex
-      - serve
-      - "--web-http-addr"
-      - 0.0.0.0:80
-      - /etc/dex/config.yaml
-    ports:
-      - containerPort: 5556
-        name: dex
-        protocol: TCP
-    readinessProbe:
-      failureThreshold: 3
-      httpGet:
-        path: /healthz/ready
-        port: telemetry
-        scheme: HTTP
-      periodSeconds: 10
-      successThreshold: 1
-      timeoutSeconds: 1
-    livenessProbe:
-      failureThreshold: 3
-      httpGet:
-        path: /healthz/live
-        port: telemetry
-        scheme: HTTP
-      periodSeconds: 10
-      successThreshold: 1
-      timeoutSeconds: 1
-    volumeMounts:
-      - mountPath: /etc/dex
-        name: config
-        readOnly: true
+
 extraVolumes:
   - name: config
     configMap:
