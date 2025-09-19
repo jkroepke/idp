@@ -5,6 +5,10 @@ strategy:
   type: Recreate
 
 gitea:
+  admin:
+    username: 'demo'
+    password: 'password'
+    email: 'demo@example.com'
   config:
     actions:
       ENABLED: false
@@ -21,7 +25,7 @@ gitea:
       DOMAIN: localhost
     service:
       ALLOW_ONLY_EXTERNAL_REGISTRATION: true
-      ENABLE_INTERNAL_SIGNIN: false
+      ENABLE_INTERNAL_SIGNIN: true
   oauth:
     - name: 'sso'
       provider: 'openidConnect'
