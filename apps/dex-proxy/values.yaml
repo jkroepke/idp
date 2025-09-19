@@ -90,5 +90,6 @@ items:
       
           sub_filter 'http://dex-proxy.dex.svc.cluster.local:8080/dex/auth' 'http://localhost/dex/auth';
           sub_filter_once on;
+          sub_filter_types application/json;
         }
       }
