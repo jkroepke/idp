@@ -24,20 +24,13 @@ configs:
     # OIDC configuration as an alternative to dex (optional).
     # Dex configuration
     url: http://localhost/argo-cd
-    dex.config: |
-      connectors:
-        - type: oidc
-          id: sso
-          name: SSO
-          config:
-            issuer: http://dex.dex.svc.cluster.local:5556/dex
-            clientID: argocd
-            clientSecret: argocd
-            # redirectURI: http://127.0.0.1:5556/callback
-            insecureSkipEmailVerified: true 
-            getUserInfo: false
-            providerDiscoveryOverrides:
-              authURL: http://localhost/dex/auth
+    oidc.config: |
+      name: SSO
+      issuer: http://dex-proxy.dex.svc.cluster.local:8080/dex
+      clientID: argocd
+      clientSecret: argocd
+      requestedScopes: ["openid", "profile", "email", "groups"]
+      enablePKCEAuthentication: true
   rbac:
     # https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/rbac.md#using-sso-usersgroups
     create: true
@@ -46,7 +39,7 @@ configs:
       g, demo@example.com, role:admin
     scopes: '[groups, email]'
 dex:
-  enabled: true
+  enabled: false
 
 server:
   extraArgs:

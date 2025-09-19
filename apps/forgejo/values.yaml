@@ -24,7 +24,7 @@ gitea:
       provider: 'openidConnect'
       key: 'forgejo'
       secret: 'forgejo'
-      autoDiscoverUrl: 'http://localhost/git/dex/.well-known/openid-configuration'
+      autoDiscoverUrl: 'http://dex-proxy.dex.svc.cluster.local:8080/dex/.well-known/openid-configuration'
       scopes: "openid email profile"
       groupClaimName: email
       adminGroup: 'demo@example.com'
@@ -49,6 +49,3 @@ ingress:
       paths:
         - path: "/git(/.*)"
           pathType: ImplementationSpecific
-        - path: "/git/dex/"
-          pathType: Prefix
-          port: dex
