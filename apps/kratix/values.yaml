@@ -1,4 +1,4 @@
-stateStores: []
+stateStores: nil
 destinations: []
 
 additionalResources:
