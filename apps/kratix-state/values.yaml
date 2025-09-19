@@ -1,0 +1,37 @@
+stateStores: []
+destinations: []
+
+additionalResources:
+- kind: GitStateStore
+  apiVersion: platform.kratix.io/v1alpha1
+  metadata:
+    name: default
+  spec:
+    secretRef:
+      name: git-credentials
+      namespace: kratix-platform-system
+    url: http://forgejo-http.forgejo.svc.cluster.local:3000/demo/state
+    branch: main
+    gitAuthor:
+      name: demo
+      email: demo@example.com
+- apiVersion: platform.kratix.io/v1alpha1
+  kind: Destination
+  metadata:
+    name: management-cluster
+    labels:
+      environment: management
+  spec:
+    stateStoreRef:
+      name: default
+      kind: GitStateStore
+    path: /management-cluster/
+    strictMatchLabels: true
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    name: git-credentials
+  type: Opaque
+  data:
+    username: ZGVtb0BleGFtcGxlLmNvbQ==
+    password: cGFzc3dvcmQ=
