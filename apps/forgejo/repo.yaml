@@ -1,0 +1,7 @@
+apiVersion: jkroepke.promise.syntasso.io/v1
+kind: gitrepo
+metadata:
+  name: state
+  namespace: default
+spec:
+  url: http://forgejo-http.forgejo.svc.cluster.local:3000

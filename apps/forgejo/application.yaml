@@ -18,6 +18,11 @@ spec:
     - repoURL: 'https://github.com/jkroepke/idp.git'
       targetRevision: init
       ref: values
+    - repoURL: https://github.com/jkroepke/idp.git
+      targetRevision: init
+      path: apps/forgejo/
+      directory:
+        include: '*/repo.yaml'
   destination:
     server: https://kubernetes.default.svc
     namespace: forgejo
