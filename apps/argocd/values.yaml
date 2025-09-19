@@ -30,10 +30,10 @@ configs:
           id: sso
           name: SSO
           config:
+            issuer: http://dex.dex.svc.cluster.local:5556/dex
             clientID: argocd
             clientSecret: argocd
           # redirectURI: http://127.0.0.1:5556/callback
-          issuer: http://dex.dex.svc.cluster.local:5556/dex/
           insecureSkipEmailVerified: true 
           getUserInfo: false
           providerDiscoveryOverrides:
