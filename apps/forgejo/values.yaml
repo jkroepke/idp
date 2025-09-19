@@ -1,6 +1,9 @@
 persistence:
   enabled: true
 
+strategy:
+  type: Recreate
+
 gitea:
   config:
     actions:
