@@ -8,7 +8,7 @@ ingress:
           pathType: Prefix
 
 config:
-  issuer: http://localhost/dex
+  issuer: http://dex.dex.svc.cluster.local/dex
   enablePasswordDB: true
   storage:
     type: kubernetes
