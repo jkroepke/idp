@@ -99,6 +99,7 @@ items:
   metadata:
     name: dex-proxy
   spec:
+    ingressClassName: nginx
     rules:
       - host: localhost
         http:
