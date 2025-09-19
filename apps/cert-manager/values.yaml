@@ -1,4 +1,6 @@
 enabled: true
+crd:
+  enabled: true
 extraArgs:
   - --logging-format=json
   - --issuer-ambient-credentials=true
