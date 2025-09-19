@@ -1,5 +1,5 @@
 enabled: true
-crd:
+crds:
   enabled: true
 extraArgs:
   - --logging-format=json
