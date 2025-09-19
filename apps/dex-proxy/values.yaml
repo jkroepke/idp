@@ -64,6 +64,8 @@ items:
     name: dex-proxy-nginx-config
   data:
     default.conf: |
+      resolver kube-dns.kube-system.svc.cluster.local valid=30s;
+      
       server {
         listen       8080;
         server_name  _;
@@ -75,7 +77,9 @@ items:
         }
       
         location /dex/ {
-          proxy_pass         http://dex.dex.svc.cluster.local:5556;
+          set $proxy "dex.dex.svc.cluster.local"; 
+      
+          proxy_pass         http://$proxy:5556;
           proxy_set_header   Host $host;
           proxy_set_header   X-Real-IP $remote_addr;
           proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
