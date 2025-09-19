@@ -4,10 +4,11 @@ ingress:
   hosts:
     - host: localhost
       paths:
-        - path: /
+        - path: /dex/
           pathType: Prefix
 
 config:
+  issuer: http://localhost/dex
   enablePasswordDB: true
   storage:
     type: kubernetes
