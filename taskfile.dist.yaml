@@ -35,9 +35,11 @@ tasks:
     preconditions:
       - sh: command -v kubectl >/dev/null
         msg: "kubectl is not installed. Please install it to proceed."
+      - sh: command -v helm >/dev/null
+        msg: "Helm is not installed. Please install it to proceed."
     cmds:
       - kubectl --context kind-idp create namespace argocd
-      - kubectl --context kind-idp apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v3.1.6/manifests/install.yaml
+      - helm upgrade --version 8.5.0 --install argocd --repo https://argoproj.github.io/argo-helm --create-namespace --namespace argocd -f ./apps/argocd/values.yaml
   argocd:bootstrap:
     desc: "Bootstrap Argo CD with the initial application"
     deps: [argocd:install]

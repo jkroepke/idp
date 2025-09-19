@@ -19,11 +19,9 @@ config:
     skipApprovalScreen: true
     alwaysShowLoginScreen: false
   staticClients:
-    - id: public-client
-      public: true
-      name: 'Public Client'
-      redirectURIs:
-        - 'https://localhost/oidc/callback'
+    - id: argocd
+      name: 'Argo CD'
+      secret: argocd
   staticPasswords:
     - email: "demo@example.com"
       # bcrypt hash of the string "password": $(echo password | htpasswd -BinC 10 admin | cut -d: -f2)

@@ -8,15 +8,19 @@ metadata:
 spec:
   project: default
   sources:
-    - repoURL: 'https://github.com/argoproj/argo-cd.git'
-      targetRevision: v3.1.6
-      path: manifests
-      directory:
-        include: 'install.yaml'
-        recurse: false
+    - repoURL: https://argoproj.github.io/argo-helm
+      chart: argocd
+      targetRevision: 8.5.0
+      helm:
+        valueFiles:
+          - $values/apps/argocd/values.yaml
+
+    - repoURL: 'https://github.com/jkroepke/idp.git'
+      targetRevision: init
+      ref: values
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd
+    namespace: dex
   syncPolicy:
     automated:
       prune: true
