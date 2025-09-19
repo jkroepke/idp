@@ -25,11 +25,12 @@ gitea:
       key: 'forgejo'
       secret: 'forgejo'
       autoDiscoverUrl: 'http://dex.dex.svc.cluster.local:5556/dex/.well-known/openid-configuration'
-      useCustomUrls: true
+      useCustomUrls: "true"
       customAuthUrl: http://localhost/dex/auth
-      #customTokenUrl: 'http://dex.dex.svc.cluster.local:5556/dex/token'
-      #customProfileUrl:
-      #customEmailUrl:
+      customTokenUrl: 'http://dex.dex.svc.cluster.local:5556/dex/token'
+      customProfileUrl: 'http://dex.dex.svc.cluster.local:5556/dex/userinfo'
+      scopes: "email profile"
+
 service:
   http:
     port: 3000
