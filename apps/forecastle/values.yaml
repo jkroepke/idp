@@ -9,7 +9,8 @@ forecastle:
     enabled: true
     className: nginx
     hosts:
-      - paths:
+      - host: localhost
+        paths:
           - path: /
             pathType: Exact
           - path: /logo192.png
