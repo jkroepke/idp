@@ -31,15 +31,14 @@ tasks:
     desc: "Install Argo CD in the cluster"
     deps: [cluster]
     status:
-      - kubectl --context kind-idp get ns argocd >/dev/null 2>&1
+      - helm --kube-context kind-idp status argocd
     preconditions:
       - sh: command -v kubectl >/dev/null
         msg: "kubectl is not installed. Please install it to proceed."
       - sh: command -v helm >/dev/null
         msg: "Helm is not installed. Please install it to proceed."
     cmds:
-      - kubectl --context kind-idp create namespace argocd
-      - helm upgrade argo-cd --wait --version 8.5.1 --install argocd --repo https://argoproj.github.io/argo-helm --create-namespace --namespace argocd -f ./apps/argocd/values.yaml
+      - helm --kube-context kind-idp upgrade argocd --wait --version 8.5.0 --install argocd --repo https://argoproj.github.io/argo-helm --create-namespace --namespace argocd -f ./apps/argocd/values.yaml
   argocd:bootstrap:
     desc: "Bootstrap Argo CD with the initial application"
     deps: [argocd:install]
