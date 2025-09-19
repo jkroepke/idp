@@ -22,7 +22,7 @@ spec:
       targetRevision: init
       path: apps/forgejo/
       directory:
-        include: '*/repo.yaml'
+        include: 'repo.yaml'
   destination:
     server: https://kubernetes.default.svc
     namespace: forgejo
