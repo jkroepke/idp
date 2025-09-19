@@ -93,7 +93,7 @@ extraDeploy:
               insecureSkipEmailVerified: true
               getUserInfo: false
               providerDiscoveryOverrides:
-                authURL: http://localhost/dex/auth
+                authURL: http://localhost/git/dex/auth
           staticClients:
             - id: forgejo
               name: 'forgejo'
