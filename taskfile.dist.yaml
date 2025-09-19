@@ -1,0 +1,60 @@
+version: '3'
+tasks:
+  certs:
+    desc: "Generate self-signed SSL certificates"
+    dir: ./cluster/certs/
+    silent: true
+    generates:
+      - sa.key
+      - sa.pub
+    status:
+      - test -f sa.key
+      - test -f sa.pub
+    preconditions:
+      - sh: command -v openssl >/dev/null
+        msg: "OpenSSL is not installed. Please install it to proceed."
+    cmds:
+      - openssl genpkey -algorithm RSA -out sa.key -pkeyopt rsa_keygen_bits:4096
+      - openssl rsa -in sa.key -pubout -out sa.pub
+  cluster:
+    desc: "Set up a local Kubernetes cluster using kind"
+    deps: [certs]
+    dir: ./cluster/
+    status:
+      - kind get clusters | grep -qe '^idp$'
+    preconditions:
+      - sh: command -v kind >/dev/null
+        msg: "kind is not installed. Please install it to proceed."
+    cmds:
+      - kind create cluster --config config.yaml
+  argocd:install:
+    desc: "Install Argo CD in the cluster"
+    deps: [cluster]
+    status:
+      - kubectl --context kind-idp get ns argocd >/dev/null 2>&1
+    preconditions:
+      - sh: command -v kubectl >/dev/null
+        msg: "kubectl is not installed. Please install it to proceed."
+    cmds:
+      - kubectl --context kind-idp create namespace argocd
+      - kubectl --context kind-idp apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v3.1.6/manifests/install.yaml
+  argocd:bootstrap:
+    desc: "Bootstrap Argo CD with the initial application"
+    deps: [argocd:install]
+    dir: ./apps/
+    status:
+      - kubectl --context kind-idp get app bootstrap -n argocd >/dev/null 2>&1
+    cmds:
+      - kubectl --context kind-idp apply -f application.yaml -n argocd
+  default:
+    desc: "Set up the complete local Kubernetes cluster with Argo CD"
+    deps: [argocd:bootstrap]
+    silent: true
+    cmds:
+      - echo "Local Kubernetes cluster 'idp' with Argo CD has been set up successfully."
+      - >-
+        echo "Access the Argo CD UI at: http://localhost:8080 (port-forwarding required)"
+      - >-
+        echo "To port-forward Argo CD server, run: kubectl --context kind-idp port-forward svc/argocd-server -n argocd 8080:443"
+      - >-
+        echo "Login to Argo CD with username: admin and password: $(kubectl --context kind-idp get secrets -n argocd argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 -d)"
