@@ -21,7 +21,7 @@ gitea:
       DOMAIN: localhost
   oauth:
     - name: 'sso'
-      provider: 'gitlab'
+      provider: 'nextcloud'
       key: 'forgejo'
       secret: 'forgejo'
       autoDiscoverUrl: 'http://dex.dex.svc.cluster.local:5556/dex/.well-known/openid-configuration'
