@@ -24,6 +24,11 @@ config:
       secret: argocd
       redirectURIs:
         - 'http://localhost/argo-cd/api/dex/callback'
+    - id: forgejo
+      name: 'forgejo'
+      secret: forgejo
+      redirectURIs:
+        - 'http://localhost/argo-cd/api/dex/callback'
   staticPasswords:
     - email: "demo@example.com"
       # bcrypt hash of the string "password": $(echo password | htpasswd -BinC 10 admin | cut -d: -f2)

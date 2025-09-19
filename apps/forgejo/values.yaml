@@ -1,0 +1,41 @@
+persistence:
+  enabled: true
+
+gitea:
+  config:
+    indexer:
+      REPO_INDEXER_ENABLED: true
+    server:
+      ROOT_URL: http://localhost/git/
+      LOCAL_ROOT_URL: http://forgejo-http.forgejo.svc.cluster.local:3000/git/
+      START_SSH_SERVER: true
+      SSH_PORT: 2222
+      OFFLINE_MODE: true
+  oauth:
+    - name: 'sso'
+      provider: 'openidConnect'
+      key: 'forgejo'
+      secret: 'forgejo'
+      autoDiscoverUrl: 'http://dex.dex.svc.cluster.local:5556/dex/.well-known/openid-configuration'
+      useCustomUrls: true
+      customAuthUrl: http://localhost/dex/auth
+      #customTokenUrl: 'http://dex.dex.svc.cluster.local:5556/dex/token'
+      #customProfileUrl:
+      #customEmailUrl:
+service:
+  http:
+    port: 3000
+  ssh:
+    port: 2222
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    forecastle.stakater.com/expose: 'true'
+    forecastle.stakater.com/appName: 'Forgejo'
+  hosts:
+    - host: localhost
+      paths:
+        - path: /git/
+          pathType: Prefix
