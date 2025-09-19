@@ -83,5 +83,10 @@ items:
           proxy_set_header   X-Forwarded-Ssl on; # Optional
           proxy_set_header   X-Frame-Options SAMEORIGIN; # Optional
           proxy_redirect     off;
+      
+          location = /dex/.well-known/openid-configuration {
+            sub_filter 'authorization_endpoint": "http://dex.dex.svc.cluster.local:5556/dex/auth' 'authorization_endpoint": "http://localhost/dex/auth';
+            sub_filter_once on;
+          }
         }
       }
