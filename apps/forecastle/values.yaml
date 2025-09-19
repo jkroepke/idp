@@ -2,6 +2,10 @@ forecastle:
   config:
     namespaceSelector:
       any: true
+    headerBackground:
+    headerForeground:
+    title: Internal Developer Platform Demo
+    crdEnabled: false
   service:
     annotations: {}
     expose: "false"
