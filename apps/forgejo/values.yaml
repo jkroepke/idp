@@ -50,6 +50,5 @@ ingress:
   hosts:
     - host: localhost
       paths:
-        - path:
-            - "/git(/|$)(.*)"
+        - path: "/git(/|$)(.*)"
           pathType: ImplementationSpecific
