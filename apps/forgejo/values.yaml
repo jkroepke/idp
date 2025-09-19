@@ -77,34 +77,6 @@ extraVolumes:
     configMap:
       name: dex
 
-extraDeploy:
-  - |-
-      apiVersion: v1
-      kind: ConfigMap
-      metadata:
-        name: dex
-      data:
-        config.yaml: |
-          issuer: http://localhost/git/dex
-          connectors:
-          - type: oidc
-            id: sso
-            name: SSO
-            config:
-              issuer: http://dex.dex.svc.cluster.local:5556/dex
-              clientID: forgejo
-              clientSecret: forgejo
-              insecureSkipEmailVerified: true
-              getUserInfo: false
-              providerDiscoveryOverrides:
-                authURL: http://localhost/git/dex/auth
-          staticClients:
-            - id: forgejo
-              name: 'forgejo'
-              secret: forgejo
-              redirectURIs:
-                - 'http://localhost/git/user/oauth2/sso/callback'
-
 ingress:
   enabled: true
   className: "nginx"
