@@ -56,11 +56,7 @@ tasks:
       - >-
         kubectl wait --namespace argocd --for=condition=ready pod --selector=app.kubernetes.io/name=argocd-application-controller --timeout=90s
       - >-
-        echo "Access the Argo CD UI at: http://localhost:8080 (port-forwarding required)"
-      - >-
-        echo "To port-forward Argo CD server, run: kubectl --context kind-idp port-forward svc/argocd-server -n argocd 8080:443"
-      #- >-
-      #  echo "Login to Argo CD with username: admin and password: $(kubectl --context kind-idp get secrets -n argocd argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 -d)"
+        echo "Access the Argo CD UI at: http://localhost/argo-cd/"
   cleanup:
     desc: "Delete the local Kubernetes cluster"
     cmds:

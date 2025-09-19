@@ -25,18 +25,14 @@ configs:
     # Dex configuration
     url: http://localhost/argo-cd
     dex.config: |
-      oauth2:
-        responseTypes: [ "code" ]
-        skipApprovalScreen: true
-        alwaysShowLoginScreen: false
       connectors:
-        # GitHub example
         - type: oauth
-          id: dex
-          name: DEX
+          id: sso
+          name: SSO
           config:
             clientID: argocd
             clientSecret: argocd
+          # redirectURI: http://127.0.0.1:5556/callback
           tokenURL: http://dex.dex.svc.cluster.local:5556/dex/token
           authorizationURL: http://localhost/dex/auth
           userInfoURL: http://dex.dex.svc.cluster.local:5556/dex/userinfo
@@ -51,7 +47,6 @@ server:
     enabled: true
     ingressClassName: "nginx"
     paths:
-      - "/argo-cd"
       - "/argo-cd/"
     pathType: Prefix
     tls: false
