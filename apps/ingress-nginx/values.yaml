@@ -3,4 +3,4 @@ controller:
     enabled: true
     external:
       enabled: true
-    type: NodePort
+      type: LoadBalancer
