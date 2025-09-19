@@ -16,7 +16,7 @@ gitea:
       REPO_INDEXER_ENABLED: true
     server:
       ROOT_URL: http://localhost/git/
-      LOCAL_ROOT_URL: http://forgejo-http.forgejo.svc.cluster.local:3000/git/
+      LOCAL_ROOT_URL: http://forgejo-http.forgejo.svc.cluster.local:3000/
       START_SSH_SERVER: true
       SSH_PORT: 2222
       OFFLINE_MODE: true
