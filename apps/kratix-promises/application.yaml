@@ -13,7 +13,7 @@ spec:
           - path: kratix/promises/*
   template:
     metadata:
-      name: '{{.path.basename}}'
+      name: 'kratix-promises-{{.path.basename}}'
     spec:
       project: kratix-promises
       sources:
