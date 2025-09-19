@@ -29,7 +29,7 @@ gitea:
       customAuthUrl: http://localhost/dex/auth
       customTokenUrl: 'http://dex.dex.svc.cluster.local:5556/dex/token'
       customProfileUrl: 'http://dex.dex.svc.cluster.local:5556/dex/userinfo'
-      scopes: "email profile"
+      scopes: "openid email profile"
 
 service:
   http:
