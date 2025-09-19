@@ -2,7 +2,6 @@ enabled: true
 crds:
   enabled: true
 extraArgs:
-  - --logging-format=json
   - --issuer-ambient-credentials=true
 enableCertificateOwnerRef: true
 # dns01RecursiveNameserversOnly: false
@@ -33,8 +32,6 @@ webhook:
     readOnlyRootFilesystem: true
   nodeSelector:
     kubernetes.io/os: linux
-  extraArgs:
-    - --logging-format=json
 cainjector:
   podDisruptionBudget:
     enabled: false
@@ -47,8 +44,6 @@ cainjector:
   containerSecurityContext:
     readOnlyRootFilesystem: true
   extraArgs:
-    - --logging-format=json
-    - --namespace=$(POD_NAMESPACE)
     - --enable-customresourcedefinitions-injectable=false
     - --enable-certificates-data-source=true
     - --enable-apiservices-injectable=false
