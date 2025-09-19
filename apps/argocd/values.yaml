@@ -161,7 +161,7 @@ configs:
             end
           end
       
-          if obj.status == "Available" then
+          if obj.status.status == "Available" then
             health_status.status = "Healthy"
             health_status.message = "Resource is up-to-date."
             return health_status
