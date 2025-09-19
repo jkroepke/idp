@@ -93,3 +93,19 @@ items:
           sub_filter_types application/json;
         }
       }
+- apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    name: dex-proxy
+  spec:
+    rules:
+      - host: localhost
+        http:
+          paths:
+            - path: /dex/
+              pathType: Prefix
+              backend:
+                service:
+                  name: dex-proxy
+                  port:
+                    name: http
