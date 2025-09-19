@@ -38,6 +38,16 @@ configs:
             getUserInfo: false
             providerDiscoveryOverrides:
               authURL: http://localhost/dex/auth
+  rbac:
+    create: true
+    # -- The name of the default role which Argo CD will falls back to, when authorizing API requests (optional).
+    # If omitted or empty, users may be still be able to login, but will see no apps, projects, etc...
+    policy.default: 'role:unauthenticated'
+
+    # -- File containing user-defined policies and role definitions.
+    # @default -- `''` (See [values.yaml])
+    policy.csv: |-
+      g, demo@example.com, role:admin
 dex:
   enabled: true
 
