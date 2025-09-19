@@ -1,0 +1,43 @@
+apiVersion: platform.kratix.io/v1alpha1
+kind: Promise
+metadata:
+  name: git-repo
+  namespace: default
+spec:
+  api:
+    apiVersion: apiextensions.k8s.io/v1
+    kind: CustomResourceDefinition
+    metadata:
+      name: gitrepos.jkroepke.promise.syntasso.io
+    spec:
+      group: jkroepke.promise.syntasso.io
+      scope: Namespaced
+      names:
+        plural: gitrepos
+        singular: gitrepo
+        kind: gitrepo
+      versions:
+        - name: v1
+          served: true
+          storage: true
+          schema:
+            openAPIV3Schema:
+              type: object
+              properties:
+                spec:
+                  type: object
+                  properties:
+                    url:
+                      type: string
+  workflows:
+    resource:
+      configure:
+        - apiVersion: platform.kratix.io/v1alpha1
+          kind: Pipeline
+          metadata:
+            name: create-repo
+          spec:
+            containers:
+              - name: create-repo
+                # update the image if you are using a custom name
+                image: ghcr.io/jkroepke/idp/git-repo:latest

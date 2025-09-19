@@ -1,0 +1,25 @@
+#!/bin/sh
+
+set -xe
+
+mkdir /tmp/git-repo
+
+name=$(yq eval '.metadata.name' /kratix/input/object.yaml)
+url=$(yq eval '.spec.url' /kratix/input/object.yaml)
+url=${url#http://}
+url=${url#https://}
+
+git config --global user.email "demo@example.com"
+git config --global user.name "demo"
+git config --global init.defaultBranch main
+
+git -C /tmp/git-repo init
+touch /tmp/git-repo/README.md
+git -C /tmp/git-repo add README.md
+git -C /tmp/git-repo commit -m "Initial commit"
+git -C /tmp/git-repo remote add origin "http://demo:password@$url/demo/$name.git"
+git -C /tmp/git-repo push -o repo.private=false -u origin main
+
+cat <<EOF > /kratix/metadata/status.yaml
+message: "Git repository created at http://$url"
+EOF

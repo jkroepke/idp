@@ -28,7 +28,7 @@ spec:
       - RespectIgnoreDifferences=true
       - ApplyOutOfSyncOnly=true
     retry:
-      limit: -1
+      limit: 5
       backoff:
         duration: 5s
         factor: 2

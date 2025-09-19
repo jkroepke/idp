@@ -1,25 +1,22 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: dex
+  name: bootstrap
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
-  sources:
-    - repoURL: https://charts.dexidp.io
-      chart: dex
-      targetRevision: 0.24.0
-      helm:
-        valueFiles:
-          - $values/apps/dex/values.yaml
-    - repoURL: 'https://github.com/jkroepke/idp.git'
-      targetRevision: init
-      ref: values
+  source:
+    repoURL: https://github.com/jkroepke/idp.git
+    targetRevision: init
+    path: kratix
+    directory:
+      recurse: true
+      include: '*/application.yaml'
   destination:
     server: https://kubernetes.default.svc
-    namespace: dex
+    namespace: argocd
   syncPolicy:
     automated:
       prune: true
@@ -31,6 +28,7 @@ spec:
       - PrunePropagationPolicy=foreground
       - RespectIgnoreDifferences=true
       - ApplyOutOfSyncOnly=true
+      - ServerSideApply=true
     retry:
       limit: 5
       backoff:
