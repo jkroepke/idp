@@ -21,7 +21,7 @@ gitea:
       DOMAIN: localhost
   oauth:
     - name: 'sso'
-      provider: 'gitea'
+      provider: 'gitlab'
       key: 'forgejo'
       secret: 'forgejo'
       autoDiscoverUrl: 'http://dex.dex.svc.cluster.local:5556/dex/.well-known/openid-configuration'
@@ -30,7 +30,6 @@ gitea:
       customTokenUrl: 'http://dex.dex.svc.cluster.local:5556/dex/token'
       customProfileUrl: 'http://dex.dex.svc.cluster.local:5556/dex/userinfo'
       scopes: "openid email profile"
-
 service:
   http:
     port: 3000
