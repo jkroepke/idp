@@ -55,6 +55,9 @@ server:
   ingress:
     enabled: true
     ingressClassName: "nginx"
+    annotations:
+      forecastle.stakater.com/expose: 'true'
+      forecastle.stakater.com/appName: 'Argo CD'
     paths:
       - "/argo-cd/"
     pathType: Prefix

@@ -1,0 +1,14 @@
+forecastle:
+  config:
+    namespaceSelector:
+      any: true
+  service:
+    annotations: {}
+    expose: "false"
+  ingress:
+    enabled: true
+    className: nginx
+    hosts:
+      - paths:
+          - path: /
+            pathType: Exact

@@ -38,7 +38,7 @@ tasks:
       - sh: command -v helm >/dev/null
         msg: "Helm is not installed. Please install it to proceed."
     cmds:
-      - helm --kube-context kind-idp upgrade argocd argo-cd --wait --version 8.5.0 --install --repo https://argoproj.github.io/argo-helm --create-namespace --namespace argocd -f ./apps/argocd/values.yaml
+      - helm --kube-context kind-idp upgrade argocd argo-cd --wait --version 8.5.0 --install --repo https://argoproj.github.io/argo-helm --create-namespace --namespace argocd -f ./apps/argocd/values.yaml --hide-notes
   argocd:bootstrap:
     desc: "Bootstrap Argo CD with the initial application"
     deps: [argocd:install]
