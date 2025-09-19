@@ -57,6 +57,7 @@ items:
     ports:
       - protocol: TCP
         port: 8080
+        name: http
         targetPort: 8080
 - apiVersion: v1
   kind: ConfigMap
