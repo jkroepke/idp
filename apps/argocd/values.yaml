@@ -23,6 +23,7 @@ configs:
     admin.enabled: false
     # OIDC configuration as an alternative to dex (optional).
     # Dex configuration
+    url: http://localhost/argo-cd
     dex.config: |
       oauth2:
         responseTypes: [ "code" ]

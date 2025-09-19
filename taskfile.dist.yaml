@@ -31,14 +31,14 @@ tasks:
     desc: "Install Argo CD in the cluster"
     deps: [cluster]
     status:
-      - helm --kube-context kind-idp status argocd
+      - helm --kube-context kind-idp status argocd -n argocd
     preconditions:
       - sh: command -v kubectl >/dev/null
         msg: "kubectl is not installed. Please install it to proceed."
       - sh: command -v helm >/dev/null
         msg: "Helm is not installed. Please install it to proceed."
     cmds:
-      - helm --kube-context kind-idp upgrade argocd --wait --version 8.5.0 --install argocd --repo https://argoproj.github.io/argo-helm --create-namespace --namespace argocd -f ./apps/argocd/values.yaml
+      - helm --kube-context kind-idp upgrade argocd argo-cd --wait --version 8.5.0 --install --repo https://argoproj.github.io/argo-helm --create-namespace --namespace argocd -f ./apps/argocd/values.yaml
   argocd:bootstrap:
     desc: "Bootstrap Argo CD with the initial application"
     deps: [argocd:install]
@@ -59,8 +59,8 @@ tasks:
         echo "Access the Argo CD UI at: http://localhost:8080 (port-forwarding required)"
       - >-
         echo "To port-forward Argo CD server, run: kubectl --context kind-idp port-forward svc/argocd-server -n argocd 8080:443"
-      - >-
-        echo "Login to Argo CD with username: admin and password: $(kubectl --context kind-idp get secrets -n argocd argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 -d)"
+      #- >-
+      #  echo "Login to Argo CD with username: admin and password: $(kubectl --context kind-idp get secrets -n argocd argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 -d)"
   cleanup:
     desc: "Delete the local Kubernetes cluster"
     cmds:
