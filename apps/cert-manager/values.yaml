@@ -1,0 +1,54 @@
+enabled: true
+extraArgs:
+  - --logging-format=json
+  - --issuer-ambient-credentials=true
+enableCertificateOwnerRef: true
+# dns01RecursiveNameserversOnly: false
+# dns01RecursiveNameservers: 168.63.129.16:53
+prometheus:
+  enabled: true
+  servicemonitor:
+    enabled: false
+automountServiceAccountToken: true
+serviceAccount:
+  automountServiceAccountToken: false
+  name: cert-manager
+replicaCount: 1
+nodeSelector:
+  kubernetes.io/os: linux
+podDisruptionBudget:
+  enabled: false
+containerSecurityContext:
+  readOnlyRootFilesystem: true
+webhook:
+  podDisruptionBudget:
+    enabled: true
+  replicaCount: 2
+  automountServiceAccountToken: true
+  serviceAccount:
+    automountServiceAccountToken: false
+  containerSecurityContext:
+    readOnlyRootFilesystem: true
+  nodeSelector:
+    kubernetes.io/os: linux
+  extraArgs:
+    - --logging-format=json
+cainjector:
+  podDisruptionBudget:
+    enabled: false
+  replicaCount: 1
+  nodeSelector:
+    kubernetes.io/os: linux
+  automountServiceAccountToken: true
+  serviceAccount:
+    automountServiceAccountToken: false
+  containerSecurityContext:
+    readOnlyRootFilesystem: true
+  extraArgs:
+    - --logging-format=json
+    - --namespace=$(POD_NAMESPACE)
+    - --enable-customresourcedefinitions-injectable=false
+    - --enable-certificates-data-source=true
+    - --enable-apiservices-injectable=false
+startupapicheck:
+  enabled: false

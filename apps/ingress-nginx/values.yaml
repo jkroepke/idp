@@ -6,3 +6,8 @@ controller:
       https: 443
   service:
     type: ClusterIP
+  admissionWebhooks:
+    patch:
+      enabled: false
+    certManager:
+      enabled: true
