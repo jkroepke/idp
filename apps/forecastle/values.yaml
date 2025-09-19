@@ -15,8 +15,8 @@ forecastle:
     hosts:
       - host: localhost
         paths:
-          - path: /
-            pathType: Exact
+          - path: "^/$"
+            pathType: ImplementationSpecific
           - path: /logo192.png
             pathType: Exact
           - path: /api/
