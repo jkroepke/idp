@@ -1,6 +1,6 @@
 controller:
-  service:
+  hostPort:
     enabled: true
-    external:
-      enabled: true
-      type: HostPort
+    ports:
+      http: 80
+      https: 443
