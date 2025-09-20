@@ -7,7 +7,7 @@ strategy:
 gitea:
   admin:
     username: 'demo'
-    password: 'password'
+    password: 'ThisIsInsecure!'
     email: 'demo@example.com'
   config:
     actions:
