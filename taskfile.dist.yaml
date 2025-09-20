@@ -62,3 +62,20 @@ tasks:
     cmds:
       - kind delete cluster --name idp
       - echo "Local Kubernetes cluster 'idp' has been deleted."
+  aws:credentials:
+    desc: "Create AWS credentials secret in the cluster"
+    dir: ./apps/crossplane/
+    status:
+      - kubectl --context kind-idp get secret aws-secret -n crossplane-system >/dev/null 2>&1
+    preconditions:
+      - sh: command -v kubectl >/dev/null
+        msg: "kubectl is not installed. Please install it to proceed."
+      - sh: '[ -n "$AWS_ACCESS_KEY_ID" ]'
+        msg: "AWS_ACCESS_KEY_ID environment variable is not set."
+      - sh: '[ -n "$AWS_SECRET_ACCESS_KEY" ]'
+        msg: "AWS_SECRET_ACCESS_KEY environment variable is not set."
+    cmds:
+      - >
+        kubectl --context kind-idp create secret generic aws-secret --namespace crossplane-system --from-literal=creds="[default]
+        aws_access_key_id=$AWS_ACCESS_KEY_ID
+        aws_secret_access_key=$AWS_SECRET_ACCESS_KEY"
