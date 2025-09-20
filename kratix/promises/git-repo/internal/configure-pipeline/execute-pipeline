@@ -17,7 +17,7 @@ git -C /tmp/git-repo init
 touch /tmp/git-repo/README.md
 git -C /tmp/git-repo add README.md
 git -C /tmp/git-repo commit -m "Initial commit"
-git -C /tmp/git-repo remote add origin "http://demo:password@$url/demo/$name.git"
+git -C /tmp/git-repo remote add origin "http://demo:ThisIsInsecure!@$url/demo/$name.git"
 git -C /tmp/git-repo push -o repo.private=false -u origin main
 
 cat <<EOF > /kratix/metadata/status.yaml

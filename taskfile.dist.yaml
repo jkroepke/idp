@@ -57,6 +57,8 @@ tasks:
         kubectl wait --namespace argocd --for=condition=ready pod --selector=app.kubernetes.io/name=argocd-application-controller --timeout=90s
       - >-
         echo "Access the Argo CD UI at: http://localhost/argo-cd/"
+      - >-
+        echo "Login with username: demo@example.com, password: ThisIsInsecure!"
   cleanup:
     desc: "Delete the local Kubernetes cluster"
     cmds:
