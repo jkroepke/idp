@@ -1,22 +1,18 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: crossplane
+  name: crossplane-providers
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   sources:
-    - repoURL: https://charts.crossplane.io/stable
-      chart: crossplane
-      targetRevision: 2.0.2
-      helm:
-        valueFiles:
-          - $values/apps/crossplane/values.yaml
-    - repoURL: 'https://github.com/jkroepke/idp.git'
+    - repoURL: https://github.com/jkroepke/idp.git
       targetRevision: init
-      ref: values
+      path: apps/crossplane-providers
+      directory:
+        include: 'provider.yaml'
   destination:
     server: https://kubernetes.default.svc
     namespace: crossplane-system
