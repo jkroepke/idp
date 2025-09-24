@@ -25,7 +25,7 @@ spec:
   runtimeConfigRef:
     name: default-poll-interval
 ---
-apiVersion: pkg.crossplane.io/vlbetal
+apiVersion: pkg.crossplane.io/v1beta1
 kind: DeploymentRuntimeConfig
 metadata:
   name: default-poll-interval
