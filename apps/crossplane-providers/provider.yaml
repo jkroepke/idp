@@ -4,6 +4,8 @@ metadata:
   name: crossplane-contrib-provider-aws-s3
 spec:
   package: xpkg.crossplane.io/crossplane-contrib/provider-aws-s3:v2.0.0
+  runtimeConfigRef:
+    name: default-poll-interval
 ---
 apiVersion: pkg.crossplane.io/v1
 kind: Provider
@@ -11,6 +13,8 @@ metadata:
   name: crossplane-contrib-provider-aws-ec2
 spec:
   package: xpkg.crossplane.io/crossplane-contrib/provider-aws-ec2:v2.0.0
+  runtimeConfigRef:
+    name: default-poll-interval
 ---
 apiVersion: pkg.crossplane.io/v1
 kind: Provider
@@ -18,16 +22,20 @@ metadata:
   name: crossplane-contrib-provider-aws-vpc
 spec:
   package: xpkg.crossplane.io/crossplane-contrib/provider-aws-vpc:v2.0.0
+  runtimeConfigRef:
+    name: default-poll-interval
 ---
-apiVersion: aws.m.upbound.io/v1beta1
-kind: ClusterProviderConfig
+apiVersion: pkg.crossplane.io/vlbetal
+kind: DeploymentRuntimeConfig
 metadata:
-  name: aws
+  name: default-poll-interval
 spec:
-  credentials:
-    source: Secret
-    secretRef:
-      namespace: crossplane-system
-      name: aws-secret
-      key: creds
----
+  deploymentTemplate:
+    spec:
+      selector: {}
+      template:
+        spec:
+          containers:
+            - name: package-runtime 
+              args:
+              - --poll-interval=1m
