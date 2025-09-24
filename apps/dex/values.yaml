@@ -24,11 +24,13 @@ config:
       secret: argocd
       redirectURIs:
         - 'http://localhost/argo-cd/auth/callback'
+        - 'http://localhost:8400/argo-cd/auth/callback'
     - id: forgejo
       name: 'forgejo'
       secret: forgejo
       redirectURIs:
         - 'http://localhost/git/user/oauth2/sso/callback'
+        - 'http://localhost:8400/git/user/oauth2/sso/callback'
   staticPasswords:
     - email: "demo@example.com"
       # bcrypt hash of the string "password": $(echo password | htpasswd -BinC 10 admin | cut -d: -f2)
