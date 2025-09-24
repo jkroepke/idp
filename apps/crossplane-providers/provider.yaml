@@ -24,6 +24,7 @@ spec:
   package: xpkg.crossplane.io/crossplane-contrib/provider-aws-vpc:v2.0.0
   runtimeConfigRef:
     name: default-poll-interval
+
 ---
 apiVersion: pkg.crossplane.io/v1beta1
 kind: DeploymentRuntimeConfig
@@ -39,3 +40,16 @@ spec:
             - name: package-runtime 
               args:
               - --poll=1m
+---
+apiVersion: aws.m.upbound.io/v1beta1
+kind: ClusterProviderConfig
+metadata:
+  name: aws
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      namespace: crossplane-system
+      name: aws-secret
+      key: creds
+---
