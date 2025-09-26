@@ -5,7 +5,6 @@ controller:
     enabled: true
     ports:
       http: 8400
-      https: 443
   service:
     type: ClusterIP
   admissionWebhooks:
