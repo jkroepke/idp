@@ -82,8 +82,6 @@ spec:
         kind: GoTemplate
         source: Inline
         inline:
-          options:
-            - missingkey=error
           template: |
             apiVersion: platform.kratix.io/v1alpha1
             kind: HealthRecord
