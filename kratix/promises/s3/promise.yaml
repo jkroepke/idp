@@ -271,8 +271,7 @@ spec:
                 annotations:
                   {{ setResourceNameAnnotation "health-record-policy" }}
                   gotemplating.fn.crossplane.io/ready: "True"
-              debug: >-
-                {{- .observed.resources.policy.status | toJson }}
+                  debug: {{ .observed.resources.policy.status | toJson | quote }}
               data:
                 {{- .observed.composite.resource.spec.kratix | toYaml | nindent 2 }}
                 {{- if eq $.observed.resources nil }}
