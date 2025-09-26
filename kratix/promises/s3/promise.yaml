@@ -15,7 +15,7 @@ spec:
       names:
         kind: S3
         plural: s3s
-        singular: S3
+        singular: s3
       scope: Namespaced
       versions:
       - name: v1
