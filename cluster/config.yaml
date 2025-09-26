@@ -20,11 +20,8 @@ nodes:
             extraArgs:
               "service-account-issuer": "https://stopsstacklocal.blob.core.windows.net/oidc"
     extraPortMappings:
-      - containerPort: 80
-        hostPort: 80
-        protocol: TCP
-      - containerPort: 443
-        hostPort: 443
+      - containerPort: 8400
+        hostPort: 8400
         protocol: TCP
       - containerPort: 2222
         hostPort: 2222
