@@ -57,4 +57,9 @@ spec:
               required:
                 - providerConfigRef
                 - kratix
+            status:
+              type: object
+              properties:
+                resourceName:
+                  type: string
 ---

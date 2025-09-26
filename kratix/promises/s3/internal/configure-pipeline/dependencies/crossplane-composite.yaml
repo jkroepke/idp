@@ -31,6 +31,9 @@ spec:
               - type: FromCompositeFieldPath
                 fromFieldPath: spec.providerConfigRef.name
                 toFieldPath: spec.providerConfigRef.name
+              - type: ToCompositeFieldPath
+                fromFieldPath: metadata.name
+                toFieldPath: status.resourceName
           - name: versioning
             base:
               apiVersion: s3.aws.upbound.io/v1beta2
@@ -40,9 +43,8 @@ spec:
                   versioningConfiguration:
                     status: Enabled
             patches:
-              - type: FromResourceFieldPath
-                fromResource: bucket
-                fromFieldPath: metadata.name
+              - type: FromCompositeFieldPath
+                fromFieldPath: status.resourceName
                 toFieldPath: spec.forProvider.bucketRef.name
               - type: FromCompositeFieldPath
                 fromFieldPath: spec.providerConfigRef.kind
@@ -54,13 +56,9 @@ spec:
             base:
               apiVersion: s3.aws.upbound.io/v1beta2
               kind: BucketPolicy
-              spec:
-                forProvider:
-                  policyDocument: '{"Version":"2012-10-17","Statement":[{"Effect":"Deny","Principal":"*","Action":["s3:GetObject"],"Resource":["arn:aws:s3:::my-bucket/*"]}]}'
             patches:
-              - type: FromResourceFieldPath
-                fromResource: bucket
-                fromFieldPath: metadata.name
+              - type: FromCompositeFieldPath
+                fromFieldPath: status.resourceName
                 toFieldPath: spec.forProvider.bucketRef.name
               - type: FromCompositeFieldPath
                 fromFieldPath: spec.providerConfigRef.kind
@@ -68,6 +66,14 @@ spec:
               - type: FromCompositeFieldPath
                 fromFieldPath: spec.providerConfigRef.name
                 toFieldPath: spec.providerConfigRef.name
+              - type: CombineToComposite
+                combine:
+                  variables:
+                    - fromFieldPath: status.resourceName
+                  strategy: string
+                  string:
+                    fmt: '{"Version":"2012-10-17","Statement":[{"Effect":"Deny","Principal":"*","Action":["s3:GetObject"],"Resource":["arn:aws:s3:::%s/*"]}]}'
+                toFieldPath: spec.forProvider.policyDocument
     - step: kratix-health-record-bucket
       functionRef:
         name: fn-go-templating
