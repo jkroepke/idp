@@ -8,7 +8,7 @@ spec:
   scope: Namespaced
   group: crossplane.jkroepke.de
   names:
-    kind: S3
+    kind: s3
     plural: s3s
   versions:
     - name: v1alpha1

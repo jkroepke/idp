@@ -5,7 +5,7 @@ metadata:
 spec:
   compositeTypeRef:
     apiVersion: crossplane.jkroepke.de/v1alpha1
-    kind: S3
+    kind: s3
   mode: Pipeline
   pipeline:
     - step: patch-and-transform
