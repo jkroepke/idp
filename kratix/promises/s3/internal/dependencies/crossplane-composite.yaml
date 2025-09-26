@@ -43,6 +43,7 @@ spec:
               kind: BucketVersioning
               spec:
                 forProvider:
+                  region: eu-central-1
                   versioningConfiguration:
                     status: Enabled
             patches:
@@ -59,6 +60,9 @@ spec:
             base:
               apiVersion: s3.aws.m.upbound.io/v1beta1
               kind: BucketPolicy
+              spec:
+                forProvider:
+                  region: eu-central-1
             patches:
               - type: FromCompositeFieldPath
                 fromFieldPath: status.resourceName
@@ -102,8 +106,10 @@ spec:
               state: degraded
               {{- end }}
               lastRun: {{ now | unixEpoch }}
+              {{- with .observed.resources.bucket.status.atProvider }}
               details:
-                {{- .observed.resources.bucket.status.atProvider | toYaml | nindent 4 }}
+                {{- . | toYaml | nindent 4 }}
+              {{- end }}
     - step: kratix-health-record-versioning
       functionRef:
         name: fn-go-templating
@@ -129,8 +135,10 @@ spec:
               state: degraded
               {{- end }}
               lastRun: {{ now | unixEpoch }}
+              {{- with .observed.resources.versioning.status.atProvider }}
               details:
-                {{- .observed.resources.versioning.status.atProvider | toYaml | nindent 4 }}
+                {{- . | toYaml | nindent 4 }}
+              {{- end }}
     - step: kratix-health-record-policy
       functionRef:
         name: fn-go-templating
@@ -156,8 +164,10 @@ spec:
               state: degraded
               {{- end }}
               lastRun: {{ now | unixEpoch }}
+              {{- with .observed.resources.policy.status.atProvider }}
               details:
-                {{- .observed.resources.policy.status.atProvider | toYaml | nindent 4 }}
+                {{- . | toYaml | nindent 4 }}
+              {{- end }}
     - step: auto-ready
       functionRef:
         name: fn-auto-ready
