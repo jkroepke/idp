@@ -145,7 +145,7 @@ spec:
               toFieldPath: status.resourceName
               type: ToCompositeFieldPath
           - base:
-              apiVersion: s3.aws.upbound.io/v1beta2
+              apiVersion: s3.aws.m.upbound.io/v1beta1
               kind: BucketVersioning
               spec:
                 forProvider:
@@ -163,7 +163,7 @@ spec:
               toFieldPath: spec.providerConfigRef.name
               type: FromCompositeFieldPath
           - base:
-              apiVersion: s3.aws.upbound.io/v1beta2
+              apiVersion: s3.aws.m.upbound.io/v1beta1
               kind: BucketPolicy
             name: policy
             patches:
