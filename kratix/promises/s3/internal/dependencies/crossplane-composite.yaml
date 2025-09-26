@@ -26,6 +26,9 @@ spec:
                     Name: aws-ba-crossplane-test
             patches:
               - type: FromCompositeFieldPath
+                fromFieldPath: metadata.name
+                toFieldPath: metadata.name
+              - type: FromCompositeFieldPath
                 fromFieldPath: spec.providerConfigRef.kind
                 toFieldPath: spec.providerConfigRef.kind
               - type: FromCompositeFieldPath

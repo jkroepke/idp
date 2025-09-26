@@ -135,6 +135,9 @@ spec:
                     Name: aws-ba-crossplane-test
             name: bucket
             patches:
+            - fromFieldPath: metadata.name
+              toFieldPath: metadata.name
+              type: FromCompositeFieldPath
             - fromFieldPath: spec.providerConfigRef.kind
               toFieldPath: spec.providerConfigRef.kind
               type: FromCompositeFieldPath
