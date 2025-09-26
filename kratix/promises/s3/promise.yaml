@@ -196,19 +196,19 @@ spec:
               metadata:
                 annotations:
                   {{ setResourceNameAnnotation "health-record-bucket" }}
-                  {{ if eq (.observed.resources.bucket | getResourceCondition "Synced").Status "True" }}
+                  {{- if eq (.observed.resources.bucket | getResourceCondition "Synced").Status "True" }}
                   gotemplating.fn.crossplane.io/ready: "True"
-                  {{ end }}
+                  {{- end }}
               data:
-                {{ .observed.composite.resource.spec.kratix | toYaml | indent 2 }}
-                {{ if eq (.observed.resources.bucket | getResourceCondition "Synced").Status "True" }}
+                {{- .observed.composite.resource.spec.kratix | toYaml | nindent 2 }}
+                {{- if eq (.observed.resources.bucket | getResourceCondition "Synced").Status "True" }}
                 state: ready
-                {{ else }}
+                {{- else }}
                 state: degraded
-                {{ end }}
+                {{- end }}
                 lastRun: {{ now | unixEpoch }}
                 details:
-                  {{ .observed.resources.bucket.status.atProvider | toYaml | indent 4 }}
+                  {{- .observed.resources.bucket.status.atProvider | toYaml | nindent 4 }}
           kind: GoTemplate
           source: Inline
         step: kratix-health-record-bucket
@@ -223,19 +223,19 @@ spec:
               metadata:
                 annotations:
                   {{ setResourceNameAnnotation "health-record-versioning" }}
-                  {{ if eq (.observed.resources.versioning | getResourceCondition "Synced").Status "True" }}
+                  {{- if eq (.observed.resources.versioning | getResourceCondition "Synced").Status "True" }}
                   gotemplating.fn.crossplane.io/ready: "True"
-                  {{ end }}
+                  {{- end }}
               data:
-                {{ .observed.composite.resource.spec.kratix | toYaml | indent 2 }}
-                {{ if eq (.observed.resources.versioning | getResourceCondition "Synced").Status "True" }}
+                {{- .observed.composite.resource.spec.kratix | toYaml | nindent 2 }}
+                {{- if eq (.observed.resources.versioning | getResourceCondition "Synced").Status "True" }}
                 state: ready
-                {{ else }}
+                {{- else }}
                 state: degraded
-                {{ end }}
+                {{- end }}
                 lastRun: {{ now | unixEpoch }}
                 details:
-                  {{ .observed.resources.versioning.status.atProvider | toYaml | indent 4 }}
+                  {{- .observed.resources.versioning.status.atProvider | toYaml | nindent 4 }}
           kind: GoTemplate
           source: Inline
         step: kratix-health-record-versioning
@@ -250,19 +250,19 @@ spec:
               metadata:
                 annotations:
                   {{ setResourceNameAnnotation "health-record-policy" }}
-                  {{ if eq (.observed.resources.policy | getResourceCondition "Synced").Status "True" }}
+                  {{- if eq (.observed.resources.policy | getResourceCondition "Synced").Status "True" }}
                   gotemplating.fn.crossplane.io/ready: "True"
-                  {{ end }}
+                  {{- end }}
               data:
-                {{ .observed.composite.resource.spec.kratix | toYaml | indent 2 }}
-                {{ if eq (.observed.resources.policy | getResourceCondition "Synced").Status "True" }}
+                {{- .observed.composite.resource.spec.kratix | toYaml | nindent 2 }}
+                {{- if eq (.observed.resources.policy | getResourceCondition "Synced").Status "True" }}
                 state: ready
-                {{ else }}
+                {{- else }}
                 state: degraded
-                {{ end }}
+                {{- end }}
                 lastRun: {{ now | unixEpoch }}
                 details:
-                  {{ .observed.resources.policy.status.atProvider | toYaml | indent 4 }}
+                  {{- .observed.resources.policy.status.atProvider | toYaml | nindent 4 }}
           kind: GoTemplate
           source: Inline
         step: kratix-health-record-policy
