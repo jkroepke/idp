@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: kratix-state
+  name: kratix-state-resources
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -10,7 +10,7 @@ spec:
   sources:
     - repoURL: http://forgejo-http.forgejo.svc.cluster.local:3000/demo/state
       targetRevision: main
-      path: management-cluster/
+      path: management-cluster/resources
       directory:
         recurse: true
   destination:

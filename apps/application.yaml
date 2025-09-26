@@ -19,6 +19,12 @@ spec:
       path: apps
       directory:
         recurse: true
+        include: '*/application+.yaml'
+    - repoURL: https://github.com/jkroepke/idp.git
+      targetRevision: init
+      path: apps
+      directory:
+        recurse: true
         include: '*/approject.yaml'
   destination:
     server: https://kubernetes.default.svc
