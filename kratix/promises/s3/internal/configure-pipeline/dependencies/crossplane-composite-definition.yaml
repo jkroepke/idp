@@ -3,6 +3,8 @@ kind: CompositeResourceDefinition
 metadata:
   name: s3s.crossplane.jkroepke.de
 spec:
+  defaultCompositionRef:
+    name: s3
   scope: Namespaced
   group: crossplane.jkroepke.de
   names:
