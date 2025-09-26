@@ -1,0 +1,5 @@
+#!/bin/sh
+
+set -xe
+
+cp /dependencies/* /kratix/output

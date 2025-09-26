@@ -1,5 +1,9 @@
 apiVersion: jkroepke.promise.syntasso.io/v1
 kind: S3
 metadata:
-  name: state
+  name: idp-s3-bucket-request
   namespace: default
+spec:
+  providerConfigRef:
+    name: aws
+    kind: ClusterProviderConfig

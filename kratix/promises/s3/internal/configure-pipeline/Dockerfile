@@ -8,7 +8,8 @@ RUN mkdir /tmp/; chown -R nobody /tmp
 ENV HOME=/tmp
 USER nobody
 
-ADD execute-pipeline execute-pipeline
+ADD execute-pipeline /execute-pipeline
+ADD install-dependencies /install-dependencies
 
-CMD [ "sh", "-c", "./execute-pipeline"]
+CMD [ "/execute-pipeline" ]
 ENTRYPOINT []
