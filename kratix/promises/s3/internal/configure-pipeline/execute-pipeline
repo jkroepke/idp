@@ -11,7 +11,7 @@ EOF
 
 cat <<EOF > /kratix/output/composite.yaml
 apiVersion: crossplane.jkroepke.de/v1alpha1
-kind: S3
+kind: s3
 metadata:
   name: $(yq eval '.metadata.name' /kratix/input/object.yaml)
   namespace: $(yq eval '.metadata.namespace' /kratix/input/object.yaml)
