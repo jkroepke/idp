@@ -48,6 +48,9 @@ spec:
                     status: Enabled
             patches:
               - type: FromCompositeFieldPath
+                fromFieldPath: metadata.name
+                toFieldPath: metadata.name
+              - type: FromCompositeFieldPath
                 fromFieldPath: status.resourceName
                 toFieldPath: spec.forProvider.bucketRef.name
               - type: FromCompositeFieldPath
@@ -64,6 +67,9 @@ spec:
                 forProvider:
                   region: eu-central-1
             patches:
+              - type: FromCompositeFieldPath
+                fromFieldPath: metadata.name
+                toFieldPath: metadata.name
               - type: FromCompositeFieldPath
                 fromFieldPath: status.resourceName
                 toFieldPath: spec.forProvider.bucketRef.name
@@ -93,6 +99,7 @@ spec:
             apiVersion: platform.kratix.io/v1alpha1
             kind: HealthRecord
             metadata:
+              name: {{ .observed.composite.resource.metadata.name }}-bucket
               annotations:
                 {{ setResourceNameAnnotation "health-record-bucket" }}
                 {{- if eq (.observed.resources.bucket | getResourceCondition "Synced").Status "True" }}
@@ -122,6 +129,7 @@ spec:
             apiVersion: platform.kratix.io/v1alpha1
             kind: HealthRecord
             metadata:
+              name: {{ .observed.composite.resource.metadata.name }}-versioning
               annotations:
                 {{ setResourceNameAnnotation "health-record-versioning" }}
                 {{- if eq (.observed.resources.versioning | getResourceCondition "Synced").Status "True" }}
@@ -151,6 +159,7 @@ spec:
             apiVersion: platform.kratix.io/v1alpha1
             kind: HealthRecord
             metadata:
+              name: {{ .observed.composite.resource.metadata.name }}-policy
               annotations:
                 {{ setResourceNameAnnotation "health-record-policy" }}
                 {{- if eq (.observed.resources.policy | getResourceCondition "Synced").Status "True" }}
