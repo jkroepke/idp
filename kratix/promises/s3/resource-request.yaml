@@ -1,0 +1,5 @@
+apiVersion: jkroepke.promise.syntasso.io/v1
+kind: S3
+metadata:
+  name: state
+  namespace: default

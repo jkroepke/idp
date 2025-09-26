@@ -1,0 +1,60 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: s3.crossplane.jkroepke.de
+spec:
+  group: crossplane.jkroepke.de
+  names:
+    kind: S3
+    plural: s3s
+  claimNames:
+    kind: S3
+    plural: s3s
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                kratix:
+                  type: object
+                  properties:
+                    promiseRef:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                      required:
+                        - name
+                    resourceRef:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        namespace:
+                          type: string
+                      required:
+                        - name
+                        - namespace
+                  required:
+                    - promiseRef
+                    - resourceRef
+                providerConfigRef:
+                  type: object
+                  properties:
+                    kind:
+                      type: string
+                    name:
+                      type: string
+                  required:
+                    - kind
+                    - name
+              required:
+                - providerConfigRef
+                - kratix
+---

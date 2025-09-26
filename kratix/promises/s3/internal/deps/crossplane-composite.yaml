@@ -1,0 +1,160 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: s3
+spec:
+  compositeTypeRef:
+    apiVersion: crossplane.jkroepke.de/v1alpha1
+    kind: S3
+  mode: Pipeline
+  pipeline:
+    - step: patch-and-transform
+      functionRef:
+        name: function-patch-and-transform
+      input:
+        apiVersion: pt.fn.crossplane.io/v1beta1
+        kind: Resources
+        resources:
+          - name: bucket
+            base:
+              apiVersion: s3.aws.m.upbound.io/v1beta1
+              kind: Bucket
+              spec:
+                forProvider:
+                  region: eu-central-1
+                  tags:
+                    Name: aws-ba-crossplane-test
+            patches:
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.providerConfigRef.kind
+                toFieldPath: spec.providerConfigRef.kind
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.providerConfigRef.name
+                toFieldPath: spec.providerConfigRef.name
+          - name: versioning
+            base:
+              apiVersion: s3.aws.upbound.io/v1beta2
+              kind: BucketVersioning
+              spec:
+                forProvider:
+                  versioningConfiguration:
+                    status: Enabled
+            patches:
+              - type: FromResourceFieldPath
+                fromResource: storage-bucket
+                fromFieldPath: metadata.name
+                toFieldPath: spec.forProvider.bucketRef.name
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.providerConfigRef.kind
+                toFieldPath: spec.providerConfigRef.kind
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.providerConfigRef.name
+                toFieldPath: spec.providerConfigRef.name
+          - name: policy
+            base:
+              apiVersion: s3.aws.upbound.io/v1beta2
+              kind: BucketPolicy
+              spec:
+                forProvider:
+                  policyDocument: '{"Version":"2012-10-17","Statement":[{"Effect":"Deny","Principal":"*","Action":["s3:GetObject"],"Resource":["arn:aws:s3:::my-bucket/*"]}]}'
+            patches:
+              - type: FromResourceFieldPath
+                fromResource: storage-bucket
+                fromFieldPath: metadata.name
+                toFieldPath: spec.forProvider.bucketRef.name
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.providerConfigRef.kind
+                toFieldPath: spec.providerConfigRef.kind
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.providerConfigRef.name
+                toFieldPath: spec.providerConfigRef.name
+    - step: kratix-health-record-bucket
+      functionRef:
+        name: fn-go-templating
+      input:
+        apiVersion: gotemplating.fn.crossplane.io/v1beta1
+        kind: GoTemplate
+        source: Inline
+        inline:
+          options:
+            - missingkey=error
+          template: |
+            apiVersion: platform.kratix.io/v1alpha1
+            kind: HealthRecord
+            metadata:
+              annotations:
+                {{ setResourceNameAnnotation "health-record-bucket" }}
+                {{ if eq (.observed.resources.bucket | getResourceCondition "Synced").Status "True" }}
+                gotemplating.fn.crossplane.io/ready: "True"
+                {{ end }}
+            data:
+              {{ .observed.composite.resource.spec.kratix | toYaml | indent 2 }}
+              {{ if eq (.observed.resources.bucket | getResourceCondition "Synced").Status "True" }}
+              state: ready
+              {{ else }}
+              state: degraded
+              {{ end }}
+              lastRun: {{ now | unixEpoch }}
+              details:
+                {{ .observed.resources.bucket.status.atProvider | toYaml | indent 4 }}
+    - step: kratix-health-record-versioning
+      functionRef:
+        name: fn-go-templating
+      input:
+        apiVersion: gotemplating.fn.crossplane.io/v1beta1
+        kind: GoTemplate
+        source: Inline
+        inline:
+          options:
+            - missingkey=error
+          template: |
+            apiVersion: platform.kratix.io/v1alpha1
+            kind: HealthRecord
+            metadata:
+              annotations:
+                {{ setResourceNameAnnotation "health-record-versioning" }}
+                {{ if eq (.observed.resources.versioning | getResourceCondition "Synced").Status "True" }}
+                gotemplating.fn.crossplane.io/ready: "True"
+                {{ end }}
+            data:
+              {{ .observed.composite.resource.spec.kratix | toYaml | indent 2 }}
+              {{ if eq (.observed.resources.versioning | getResourceCondition "Synced").Status "True" }}
+              state: ready
+              {{ else }}
+              state: degraded
+              {{ end }}
+              lastRun: {{ now | unixEpoch }}
+              details:
+                {{ .observed.resources.versioning.status.atProvider | toYaml | indent 4 }}
+    - step: kratix-health-record-policy
+      functionRef:
+        name: fn-go-templating
+      input:
+        apiVersion: gotemplating.fn.crossplane.io/v1beta1
+        kind: GoTemplate
+        source: Inline
+        inline:
+          options:
+            - missingkey=error
+          template: |
+            apiVersion: platform.kratix.io/v1alpha1
+            kind: HealthRecord
+            metadata:
+              annotations:
+                {{ setResourceNameAnnotation "health-record-policy" }}
+                {{ if eq (.observed.resources.policy | getResourceCondition "Synced").Status "True" }}
+                gotemplating.fn.crossplane.io/ready: "True"
+                {{ end }}
+            data:
+              {{ .observed.composite.resource.spec.kratix | toYaml | indent 2 }}
+              {{ if eq (.observed.resources.policy | getResourceCondition "Synced").Status "True" }}
+              state: ready
+              {{ else }}
+              state: degraded
+              {{ end }}
+              lastRun: {{ now | unixEpoch }}
+              details:
+                {{ .observed.resources.policy.status.atProvider | toYaml | indent 4 }}
+    - step: auto-ready
+      functionRef:
+        name: fn-auto-ready
