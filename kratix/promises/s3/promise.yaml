@@ -13,7 +13,7 @@ spec:
     spec:
       group: kratix.jkroepke.de
       names:
-        kind: S3
+        kind: s3
         plural: s3s
         singular: s3
       scope: Namespaced
