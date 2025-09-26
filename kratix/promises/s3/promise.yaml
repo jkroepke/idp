@@ -210,9 +210,7 @@ spec:
                 name: {{ .observed.composite.resource.metadata.name }}-bucket
                 annotations:
                   {{ setResourceNameAnnotation "health-record-bucket" }}
-                  {{- if eq (.observed.resources.bucket | getResourceCondition "Synced").Status "True" }}
                   gotemplating.fn.crossplane.io/ready: "True"
-                  {{- end }}
               data:
                 {{- .observed.composite.resource.spec.kratix | toYaml | nindent 2 }}
                 {{- if eq $.observed.resources nil }}
@@ -242,9 +240,7 @@ spec:
                 name: {{ .observed.composite.resource.metadata.name }}-versioning
                 annotations:
                   {{ setResourceNameAnnotation "health-record-versioning" }}
-                  {{- if eq (.observed.resources.versioning | getResourceCondition "Synced").Status "True" }}
                   gotemplating.fn.crossplane.io/ready: "True"
-                  {{- end }}
               data:
                 {{- .observed.composite.resource.spec.kratix | toYaml | nindent 2 }}
                 lastRun: {{ now | unixEpoch }}
@@ -274,9 +270,7 @@ spec:
                 name: {{ .observed.composite.resource.metadata.name }}-policy
                 annotations:
                   {{ setResourceNameAnnotation "health-record-policy" }}
-                  {{- if eq (.observed.resources.policy | getResourceCondition "Synced").Status "True" }}
                   gotemplating.fn.crossplane.io/ready: "True"
-                  {{- end }}
               data:
                 {{- .observed.composite.resource.spec.kratix | toYaml | nindent 2 }}
                 {{- if eq $.observed.resources nil }}
