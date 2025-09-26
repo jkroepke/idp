@@ -41,7 +41,7 @@ spec:
                     status: Enabled
             patches:
               - type: FromResourceFieldPath
-                fromResource: storage-bucket
+                fromResource: bucket
                 fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.bucketRef.name
               - type: FromCompositeFieldPath
@@ -59,7 +59,7 @@ spec:
                   policyDocument: '{"Version":"2012-10-17","Statement":[{"Effect":"Deny","Principal":"*","Action":["s3:GetObject"],"Resource":["arn:aws:s3:::my-bucket/*"]}]}'
             patches:
               - type: FromResourceFieldPath
-                fromResource: storage-bucket
+                fromResource: bucket
                 fromFieldPath: metadata.name
                 toFieldPath: spec.forProvider.bucketRef.name
               - type: FromCompositeFieldPath
