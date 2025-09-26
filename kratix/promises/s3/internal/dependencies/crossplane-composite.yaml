@@ -107,13 +107,15 @@ spec:
                 {{- end }}
             data:
               {{- .observed.composite.resource.spec.kratix | toYaml | nindent 2 }}
-              {{- if eq (.observed.resources.bucket | getResourceCondition "Synced").Status "True" }}
+              {{- if eq $.observed.resources nil }}
+              state: unknown
+              {{- else if eq (.observed.resources.bucket | getResourceCondition "Synced").Status "True" }}
               state: ready
               {{- else }}
               state: degraded
               {{- end }}
               lastRun: {{ now | unixEpoch }}
-              {{- with .observed.resources.bucket.status.atProvider }}
+              {{- with .observed.resources.bucket.status }}
               details:
                 {{- . | toYaml | nindent 4 }}
               {{- end }}
@@ -137,13 +139,15 @@ spec:
                 {{- end }}
             data:
               {{- .observed.composite.resource.spec.kratix | toYaml | nindent 2 }}
-              {{- if eq (.observed.resources.versioning | getResourceCondition "Synced").Status "True" }}
+              lastRun: {{ now | unixEpoch }}
+              {{- if eq $.observed.resources nil }}
+              state: unknown
+              {{- else if eq (.observed.resources.versioning | getResourceCondition "Synced").Status "True" }}
               state: ready
               {{- else }}
               state: degraded
               {{- end }}
-              lastRun: {{ now | unixEpoch }}
-              {{- with .observed.resources.versioning.status.atProvider }}
+              {{- with .observed.resources.versioning.status }}
               details:
                 {{- . | toYaml | nindent 4 }}
               {{- end }}
@@ -167,13 +171,15 @@ spec:
                 {{- end }}
             data:
               {{- .observed.composite.resource.spec.kratix | toYaml | nindent 2 }}
-              {{- if eq (.observed.resources.policy | getResourceCondition "Synced").Status "True" }}
+              {{- if eq $.observed.resources nil }}
+              state: unknown
+              {{- else if eq (.observed.resources.policy | getResourceCondition "Synced").Status "True" }}
               state: ready
               {{- else }}
               state: degraded
               {{- end }}
               lastRun: {{ now | unixEpoch }}
-              {{- with .observed.resources.policy.status.atProvider }}
+              {{- with .observed.resources.policy.status }}
               details:
                 {{- . | toYaml | nindent 4 }}
               {{- end }}
