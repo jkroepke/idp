@@ -8,16 +8,9 @@ metadata:
 spec:
   project: default
   sources:
-    - repoURL: http://forgejo-http.forgejo.svc.cluster.local:3000/demo/state
-      targetRevision: main
-      path: management-cluster/resources/
-      directory:
-        recurse: true
-    - repoURL: http://forgejo-http.forgejo.svc.cluster.local:3000/demo/state
-      targetRevision: main
-      path: management-cluster/dependencies/
-      directory:
-        recurse: true
+  - repoURL: http://forgejo-http.forgejo.svc.cluster.local:3000/demo/state
+    targetRevision: main
+    path: management-cluster/
   destination:
     server: https://kubernetes.default.svc
     namespace: kratix-worker-system
