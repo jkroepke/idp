@@ -293,6 +293,20 @@ spec:
       namespace: default
     spec:
       package: xpkg.upbound.io/crossplane-contrib/function-go-templating:v0.11.0
+  - apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      labels:
+        rbac.crossplane.io/aggregate-to-crossplane: "true"
+      name: kratix:aggregate-to-crossplane
+      namespace: default
+    rules:
+    - apiGroups:
+      - platform.kratix.io
+      resources:
+      - healthrecords
+      verbs:
+      - '*'
   destinationSelectors:
   - matchLabels:
       environment: management
