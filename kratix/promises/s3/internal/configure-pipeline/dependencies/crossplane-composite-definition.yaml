@@ -3,13 +3,11 @@ kind: CompositeResourceDefinition
 metadata:
   name: s3s.crossplane.jkroepke.de
 spec:
+  scope: Namespaced
   group: crossplane.jkroepke.de
   names:
     kind: S3
     plural: s3s
-  claimNames:
-    kind: S3Claim
-    plural: s3claims
   versions:
     - name: v1alpha1
       served: true
