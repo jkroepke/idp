@@ -113,7 +113,7 @@ spec:
               state: degraded
               {{- end }}
               lastRun: {{ now | unixEpoch }}
-              {{- with .observed.resources.bucket.status }}
+              {{- with .observed.resources.versioning.bucket.status }}
               details:
                 {{- . | toYaml | nindent 4 }}
               {{- end }}
@@ -143,7 +143,7 @@ spec:
               {{- else }}
               state: degraded
               {{- end }}
-              {{- with .observed.resources.versioning.status }}
+              {{- with .observed.resources.versioning.resource.status }}
               details:
                 {{- . | toYaml | nindent 4 }}
               {{- end }}
@@ -163,7 +163,6 @@ spec:
               annotations:
                 {{ setResourceNameAnnotation "health-record-policy" }}
                 gotemplating.fn.crossplane.io/ready: "True"
-                debug: {{ .observed.resources.policy | toJson | quote }}
             data:
               {{- .observed.composite.resource.spec.kratix | toYaml | nindent 2 }}
               {{- if eq $.observed.resources nil }}
@@ -174,7 +173,7 @@ spec:
               state: degraded
               {{- end }}
               lastRun: {{ now | unixEpoch }}
-              {{- with .observed.resources.policy.status }}
+              {{- with .observed.resources.policy.resource.status }}
               details:
                 {{- . | toYaml | nindent 4 }}
               {{- end }}
