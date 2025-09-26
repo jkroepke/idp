@@ -196,7 +196,7 @@ spec:
                 variables:
                 - fromFieldPath: status.resourceName
               toFieldPath: spec.forProvider.policy
-              type: CombineToComposite
+              type: CombineFromComposite
         step: patch-and-transform
       - functionRef:
           name: fn-go-templating
