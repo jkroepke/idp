@@ -1,4 +1,4 @@
-apiVersion: jkroepke.promise.syntasso.io/v1
+apiVersion: kratix.jkroepke.de/v1
 kind: S3
 metadata:
   name: idp-s3-bucket-request
