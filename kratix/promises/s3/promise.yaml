@@ -42,23 +42,265 @@ spec:
         storage: true
         subresources:
           status: {}
+  dependencies:
+  - apiVersion: apiextensions.crossplane.io/v1
+    kind: CompositeResourceDefinition
+    metadata:
+      name: s3s.crossplane.jkroepke.de
+      namespace: default
+    spec:
+      defaultCompositionRef:
+        name: s3
+      group: crossplane.jkroepke.de
+      names:
+        kind: s3
+        plural: s3s
+      scope: Namespaced
+      versions:
+      - name: v1alpha1
+        referenceable: true
+        schema:
+          openAPIV3Schema:
+            properties:
+              spec:
+                properties:
+                  kratix:
+                    properties:
+                      promiseRef:
+                        properties:
+                          name:
+                            type: string
+                        required:
+                        - name
+                        type: object
+                      resourceRef:
+                        properties:
+                          name:
+                            type: string
+                          namespace:
+                            type: string
+                        required:
+                        - name
+                        - namespace
+                        type: object
+                    required:
+                    - promiseRef
+                    - resourceRef
+                    type: object
+                  providerConfigRef:
+                    properties:
+                      kind:
+                        type: string
+                      name:
+                        type: string
+                    required:
+                    - kind
+                    - name
+                    type: object
+                required:
+                - providerConfigRef
+                - kratix
+                type: object
+              status:
+                properties:
+                  resourceName:
+                    type: string
+                type: object
+            type: object
+        served: true
+  - apiVersion: apiextensions.crossplane.io/v1
+    kind: Composition
+    metadata:
+      name: s3
+      namespace: default
+    spec:
+      compositeTypeRef:
+        apiVersion: crossplane.jkroepke.de/v1alpha1
+        kind: s3
+      mode: Pipeline
+      pipeline:
+      - functionRef:
+          name: fn-patch-and-transform
+        input:
+          apiVersion: pt.fn.crossplane.io/v1beta1
+          kind: Resources
+          resources:
+          - base:
+              apiVersion: s3.aws.m.upbound.io/v1beta1
+              kind: Bucket
+              spec:
+                forProvider:
+                  region: eu-central-1
+                  tags:
+                    Name: aws-ba-crossplane-test
+            name: bucket
+            patches:
+            - fromFieldPath: spec.providerConfigRef.kind
+              toFieldPath: spec.providerConfigRef.kind
+              type: FromCompositeFieldPath
+            - fromFieldPath: spec.providerConfigRef.name
+              toFieldPath: spec.providerConfigRef.name
+              type: FromCompositeFieldPath
+            - fromFieldPath: metadata.name
+              toFieldPath: status.resourceName
+              type: ToCompositeFieldPath
+          - base:
+              apiVersion: s3.aws.upbound.io/v1beta2
+              kind: BucketVersioning
+              spec:
+                forProvider:
+                  versioningConfiguration:
+                    status: Enabled
+            name: versioning
+            patches:
+            - fromFieldPath: status.resourceName
+              toFieldPath: spec.forProvider.bucketRef.name
+              type: FromCompositeFieldPath
+            - fromFieldPath: spec.providerConfigRef.kind
+              toFieldPath: spec.providerConfigRef.kind
+              type: FromCompositeFieldPath
+            - fromFieldPath: spec.providerConfigRef.name
+              toFieldPath: spec.providerConfigRef.name
+              type: FromCompositeFieldPath
+          - base:
+              apiVersion: s3.aws.upbound.io/v1beta2
+              kind: BucketPolicy
+            name: policy
+            patches:
+            - fromFieldPath: status.resourceName
+              toFieldPath: spec.forProvider.bucketRef.name
+              type: FromCompositeFieldPath
+            - fromFieldPath: spec.providerConfigRef.kind
+              toFieldPath: spec.providerConfigRef.kind
+              type: FromCompositeFieldPath
+            - fromFieldPath: spec.providerConfigRef.name
+              toFieldPath: spec.providerConfigRef.name
+              type: FromCompositeFieldPath
+            - combine:
+                strategy: string
+                string:
+                  fmt: '{"Version":"2012-10-17","Statement":[{"Effect":"Deny","Principal":"*","Action":["s3:GetObject"],"Resource":["arn:aws:s3:::%s/*"]}]}'
+                variables:
+                - fromFieldPath: status.resourceName
+              toFieldPath: spec.forProvider.policyDocument
+              type: CombineToComposite
+        step: patch-and-transform
+      - functionRef:
+          name: fn-go-templating
+        input:
+          apiVersion: gotemplating.fn.crossplane.io/v1beta1
+          inline:
+            options:
+            - missingkey=error
+            template: |
+              apiVersion: platform.kratix.io/v1alpha1
+              kind: HealthRecord
+              metadata:
+                annotations:
+                  {{ setResourceNameAnnotation "health-record-bucket" }}
+                  {{ if eq (.observed.resources.bucket | getResourceCondition "Synced").Status "True" }}
+                  gotemplating.fn.crossplane.io/ready: "True"
+                  {{ end }}
+              data:
+                {{ .observed.composite.resource.spec.kratix | toYaml | indent 2 }}
+                {{ if eq (.observed.resources.bucket | getResourceCondition "Synced").Status "True" }}
+                state: ready
+                {{ else }}
+                state: degraded
+                {{ end }}
+                lastRun: {{ now | unixEpoch }}
+                details:
+                  {{ .observed.resources.bucket.status.atProvider | toYaml | indent 4 }}
+          kind: GoTemplate
+          source: Inline
+        step: kratix-health-record-bucket
+      - functionRef:
+          name: fn-go-templating
+        input:
+          apiVersion: gotemplating.fn.crossplane.io/v1beta1
+          inline:
+            options:
+            - missingkey=error
+            template: |
+              apiVersion: platform.kratix.io/v1alpha1
+              kind: HealthRecord
+              metadata:
+                annotations:
+                  {{ setResourceNameAnnotation "health-record-versioning" }}
+                  {{ if eq (.observed.resources.versioning | getResourceCondition "Synced").Status "True" }}
+                  gotemplating.fn.crossplane.io/ready: "True"
+                  {{ end }}
+              data:
+                {{ .observed.composite.resource.spec.kratix | toYaml | indent 2 }}
+                {{ if eq (.observed.resources.versioning | getResourceCondition "Synced").Status "True" }}
+                state: ready
+                {{ else }}
+                state: degraded
+                {{ end }}
+                lastRun: {{ now | unixEpoch }}
+                details:
+                  {{ .observed.resources.versioning.status.atProvider | toYaml | indent 4 }}
+          kind: GoTemplate
+          source: Inline
+        step: kratix-health-record-versioning
+      - functionRef:
+          name: fn-go-templating
+        input:
+          apiVersion: gotemplating.fn.crossplane.io/v1beta1
+          inline:
+            options:
+            - missingkey=error
+            template: |
+              apiVersion: platform.kratix.io/v1alpha1
+              kind: HealthRecord
+              metadata:
+                annotations:
+                  {{ setResourceNameAnnotation "health-record-policy" }}
+                  {{ if eq (.observed.resources.policy | getResourceCondition "Synced").Status "True" }}
+                  gotemplating.fn.crossplane.io/ready: "True"
+                  {{ end }}
+              data:
+                {{ .observed.composite.resource.spec.kratix | toYaml | indent 2 }}
+                {{ if eq (.observed.resources.policy | getResourceCondition "Synced").Status "True" }}
+                state: ready
+                {{ else }}
+                state: degraded
+                {{ end }}
+                lastRun: {{ now | unixEpoch }}
+                details:
+                  {{ .observed.resources.policy.status.atProvider | toYaml | indent 4 }}
+          kind: GoTemplate
+          source: Inline
+        step: kratix-health-record-policy
+      - functionRef:
+          name: fn-auto-ready
+        step: auto-ready
+  - apiVersion: pkg.crossplane.io/v1
+    kind: Function
+    metadata:
+      name: fn-auto-ready
+      namespace: default
+    spec:
+      package: xpkg.upbound.io/crossplane-contrib/function-auto-ready:v0.5.0
+  - apiVersion: pkg.crossplane.io/v1
+    kind: Function
+    metadata:
+      name: fn-patch-and-transform
+      namespace: default
+    spec:
+      package: xpkg.crossplane.io/crossplane-contrib/function-patch-and-transform:v0.8.2
+  - apiVersion: pkg.crossplane.io/v1beta1
+    kind: Function
+    metadata:
+      name: fn-go-templating
+      namespace: default
+    spec:
+      package: xpkg.upbound.io/crossplane-contrib/function-go-templating:v0.11.0
   destinationSelectors:
   - matchLabels:
       environment: management
   workflows:
-    promise:
-      configure:
-      - apiVersion: platform.kratix.io/v1alpha1
-        kind: Pipeline
-        metadata:
-          creationTimestamp: null
-          name: dependencies
-        spec:
-          containers:
-          - image: ghcr.io/jkroepke/idp/create-s3-bucket
-            name: configure-deps
-            command: ["/install-dependencies"]
-          rbac: {}
+    promise: {}
     resource:
       configure:
       - apiVersion: platform.kratix.io/v1alpha1
