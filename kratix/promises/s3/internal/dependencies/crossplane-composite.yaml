@@ -79,7 +79,7 @@ spec:
               - type: FromCompositeFieldPath
                 fromFieldPath: spec.providerConfigRef.name
                 toFieldPath: spec.providerConfigRef.name
-              - type: CombineToComposite
+              - type: CombineFromComposite
                 combine:
                   variables:
                     - fromFieldPath: status.resourceName
