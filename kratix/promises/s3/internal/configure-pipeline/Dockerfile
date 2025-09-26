@@ -8,6 +8,7 @@ RUN mkdir /tmp/; chown -R nobody /tmp
 ENV HOME=/tmp
 USER nobody
 
+ADD dependencies /dependencies
 ADD execute-pipeline /execute-pipeline
 ADD install-dependencies /install-dependencies
 

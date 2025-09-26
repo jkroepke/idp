@@ -4,7 +4,7 @@ controller:
   hostPort:
     enabled: true
     ports:
-      http: 8400
+      http: 80
   service:
     type: ClusterIP
   admissionWebhooks:
