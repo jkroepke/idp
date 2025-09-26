@@ -157,6 +157,9 @@ spec:
                     status: Enabled
             name: versioning
             patches:
+            - fromFieldPath: metadata.name
+              toFieldPath: metadata.name
+              type: FromCompositeFieldPath
             - fromFieldPath: status.resourceName
               toFieldPath: spec.forProvider.bucketRef.name
               type: FromCompositeFieldPath
@@ -174,6 +177,9 @@ spec:
                   region: eu-central-1
             name: policy
             patches:
+            - fromFieldPath: metadata.name
+              toFieldPath: metadata.name
+              type: FromCompositeFieldPath
             - fromFieldPath: status.resourceName
               toFieldPath: spec.forProvider.bucketRef.name
               type: FromCompositeFieldPath
@@ -189,7 +195,7 @@ spec:
                   fmt: '{"Version":"2012-10-17","Statement":[{"Effect":"Deny","Principal":"*","Action":["s3:GetObject"],"Resource":["arn:aws:s3:::%s/*"]}]}'
                 variables:
                 - fromFieldPath: status.resourceName
-              toFieldPath: spec.forProvider.policyDocument
+              toFieldPath: spec.forProvider.policy
               type: CombineToComposite
         step: patch-and-transform
       - functionRef:
@@ -201,6 +207,7 @@ spec:
               apiVersion: platform.kratix.io/v1alpha1
               kind: HealthRecord
               metadata:
+                name: {{ .observed.composite.resource.metadata.name }}-bucket
                 annotations:
                   {{ setResourceNameAnnotation "health-record-bucket" }}
                   {{- if eq (.observed.resources.bucket | getResourceCondition "Synced").Status "True" }}
@@ -230,6 +237,7 @@ spec:
               apiVersion: platform.kratix.io/v1alpha1
               kind: HealthRecord
               metadata:
+                name: {{ .observed.composite.resource.metadata.name }}-versioning
                 annotations:
                   {{ setResourceNameAnnotation "health-record-versioning" }}
                   {{- if eq (.observed.resources.versioning | getResourceCondition "Synced").Status "True" }}
@@ -259,6 +267,7 @@ spec:
               apiVersion: platform.kratix.io/v1alpha1
               kind: HealthRecord
               metadata:
+                name: {{ .observed.composite.resource.metadata.name }}-policy
                 annotations:
                   {{ setResourceNameAnnotation "health-record-policy" }}
                   {{- if eq (.observed.resources.policy | getResourceCondition "Synced").Status "True" }}
