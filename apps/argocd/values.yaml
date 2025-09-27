@@ -10,6 +10,11 @@ configs:
     create: true
     annotations: {}
     application.resourceTrackingMethod: annotation
+    resource.exclusions: |
+      - apiGroups:
+        - "*"
+        kinds:
+        - ProviderConfigUsage
     # https://argo-cd.readthedocs.io/en/stable/operator-manual/reconcile/#argoprojioapplication
     resource.customizations.ignoreResourceUpdates.argoproj.io_Application: |
       jsonPointers:
